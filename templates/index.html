@@ -1,182 +1,158 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chatbot IVAN</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Roboto', sans-serif;
-      background-color: #f0f2f5;
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #chat-container {
-      background: #ffffff;
-      width: 100%;
-      max-width: 450px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    #chat-header {
-      background-color: #123664;  /* Màu IVAN */
-      color: white;
-      padding: 15px;
-      text-align: center;
-      font-size: 20px;
-      font-weight: bold;
-      border-bottom: 2px solid #0e2a4a; /* Đường viền dưới */
-    }
-
-    #chatbox {
-      padding: 20px;
-      height: 400px;
-      overflow-y: auto;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 10px; /* Khoảng cách giữa các tin nhắn */
-    }
-
-    .message {
-      padding: 12px 16px;
-      border-radius: 20px;
-      max-width: 75%;
-      line-height: 1.5;
-      word-wrap: break-word;
-      position: relative; /* Để có thể thêm timestamp */
-    }
-
-    .user-message {
-      background-color: #c9dbe6; /* Màu khung chat người dùng */
-      color: black;
-      align-self: flex-end; /* Tin nhắn người dùng bên phải */
-      border-bottom-right-radius: 0; /* Bo góc dưới bên phải */
-    }
-
-    .bot-message {
-      background-color: #e9e9eb;
-      color: black;
-      align-self: flex-start; /* Tin nhắn chatbot bên trái */
-      border-bottom-left-radius: 0; /* Bo góc dưới bên trái */
-    }
-
-    .timestamp {
-      font-size: 12px;
-      color: #888;
-      position: absolute;
-      bottom: -18px;
-      right: 10px;
-    }
-
-    #input-area {
-      display: flex;
-      padding: 10px;
-      background: #f7f7f7;
-      border-top: 1px solid #ddd;
-    }
-
-    #user-input {
-      flex: 1;
-      padding: 10px 14px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 20px;
-      outline: none;
-      transition: border 0.3s;
-    }
-
-    #user-input:focus {
-      border-color: #123664; /* Màu IVAN */
-    }
-
-    #send-button {
-      margin-left: 10px;
-      background-color: #123664; /* Màu IVAN */
-      border: none;
-      color: white;
-      padding: 10px 15px;
-      font-size: 16px;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    #send-button:hover {
-      background-color: #0e2a4a; /* Màu tối hơn khi hover */
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot IVAN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f7f9fc;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #chat-container {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        #chat-header {
+            background-color: #123664; /* Màu tiêu đề */
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 20px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        #chatbox {
+            padding: 20px;
+            height: 400px;
+            overflow-y: auto;
+            border-radius: 0 0 10px 10px;
+            border-top: 1px solid #eaeaea;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .message {
+            padding: 10px;
+            border-radius: 5px;
+            max-width: 80%;
+            position: relative;
+            word-wrap: break-word;
+        }
+        .user-message {
+            background-color: #c9dbe6; /* Màu khung chat người dùng */
+            margin-left: auto;
+            border-bottom-right-radius: 0; /* Bo góc dưới bên phải */
+        }
+        .bot-message {
+            background-color: #e2e3e5; /* Màu khung chat chatbot */
+            margin-right: auto;
+            border-bottom-left-radius: 0; /* Bo góc dưới bên trái */
+        }
+        #input-area {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #eaeaea;
+            border-radius: 0 0 10px 10px; /* Bo góc cho khung nhập */
+        }
+        #user-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #123664; /* Màu IVAN */
+            border-radius: 5px 0 0 5px; /* Bo góc cho ô nhập */
+            font-size: 16px;
+        }
+        #send-button {
+            padding: 10px 15px;
+            margin-left: 5px;
+            background-color: #123664; /* Màu IVAN */
+            color: white;
+            border: none;
+            border-radius: 0 5px 5px 0; /* Bo góc cho nút gửi */
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #send-button:hover {
+            background-color: #0e2a4a; /* Màu tối hơn khi hover */
+        }
+        .timestamp {
+            font-size: 12px;
+            color: #888;
+            position: absolute;
+            bottom: -18px;
+            right: 10px;
+        }
+    </style>
 </head>
 <body>
 
 <div id="chat-container">
-  <div id="chat-header">IVAN</div>
-  <div id="chatbox"></div>
-  <div id="input-area">
-    <input type="text" id="user-input" placeholder="Nhấn Enter để gửi tin..." autocomplete="off" />
-    <button id="send-button">Gửi</button>
-  </div>
+    <div id="chat-header">IVAN</div>
+    <div id="chatbox"></div>
+    <div id="input-area">
+        <input type="text" id="user-input" placeholder="Nhập tin nhắn..." />
+        <button id="send-button">Gửi</button>
+    </div>
 </div>
 
 <script>
-  const inputField = document.getElementById('user-input');
-  const sendButton = document.getElementById('send-button');
+    document.getElementById('send-button').onclick = function() {
+        sendMessage();
+    };
 
-  function getCurrentTime() {
-    const now = new Date();
-    return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  }
+    document.getElementById('user-input').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Ngăn không cho thêm dòng mới
+            sendMessage(); // Gửi tin nhắn
+        }
+    });
 
-  function addMessage(text, sender) {
-    const chatbox = document.getElementById('chatbox');
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'message ' + (sender === 'user' ? 'user-message' : 'bot-message');
-    
-    const timestamp = document.createElement('span');
-    timestamp.className = 'timestamp';
-    timestamp.textContent = getCurrentTime();
+    function sendMessage() {
+        var userInput = document.getElementById('user-input').value;
+        if (userInput) {
+            addMessage(userInput, 'user');
+            document.getElementById('user-input').value = '';
 
-    messageDiv.textContent = sender === 'user' ? text : "Chatbot: " + text;
-    messageDiv.appendChild(timestamp);
-    chatbox.appendChild(messageDiv);
-    chatbox.scrollTop = chatbox.scrollHeight; // Tự động cuộn xuống
-  }
-
-  function sendMessage() {
-    const userInput = inputField.value.trim();
-    if (!userInput) return;
-
-    addMessage(userInput, 'user');
-    inputField.value = '';
-
-    // Simulate chatbot response
-    setTimeout(() => {
-      addMessage(userInput, 'bot');
-    }, 1000);
-  }
-
-  inputField.addEventListener('keydown', function (event) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      sendMessage();
+            fetch('/chatbot', { // Gọi API chatbot
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: userInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                addMessage(data.response, 'bot'); // Hiển thị phản hồi của chatbot
+            });
+        }
     }
-  });
 
-  sendButton.addEventListener('click', sendMessage);
+    function addMessage(text, sender) {
+        var chatbox = document.getElementById('chatbox');
+        var messageDiv = document.createElement('div');
+        messageDiv.className = 'message ' + (sender === 'user' ? 'user-message' : 'bot-message');
+        messageDiv.textContent = text;
+
+        var timestamp = document.createElement('span');
+        timestamp.className = 'timestamp';
+        timestamp.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        messageDiv.appendChild(timestamp);
+
+        chatbox.appendChild(messageDiv);
+        chatbox.scrollTop = chatbox.scrollHeight; // Cuộn xuống cuối
+    }
 </script>
 
 </body>
