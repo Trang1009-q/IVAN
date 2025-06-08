@@ -1,118 +1,150 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f7f9fc;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        #chat-container {
-            width: 100%;
-            max-width: 600px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-        }
-        #chatbox {
-            padding: 20px;
-            height: 400px;
-            overflow-y: auto;
-            border-radius: 10px 10px 0 0;
-            border-bottom: 1px solid #eaeaea;
-        }
-        .message {
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-            max-width: 80%;
-            position: relative;
-        }
-        .user-message {
-            background-color: #d1ecf1;
-            margin-left: auto;
-        }
-        .bot-message {
-            background-color: #e2e3e5;
-            margin-right: auto;
-        }
-        #input-area {
-            display: flex;
-            padding: 10px;
-            border-top: 1px solid #eaeaea;
-        }
-        #user-input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #007bff;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        #send-button {
-            padding: 10px 15px;
-            margin-left: 5px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        #send-button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trợ lý ảo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #eef2f7;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #chat-container {
+      background: #fff;
+      width: 100%;
+      max-width: 600px;
+      border-radius: 12px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    #chatbox {
+      padding: 20px;
+      height: 450px;
+      overflow-y: auto;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .message {
+      padding: 12px 16px;
+      margin: 10px 0;
+      border-radius: 8px;
+      max-width: 75%;
+      line-height: 1.5;
+      word-wrap: break-word;
+    }
+
+    .user-message {
+      background-color: #d1ecf1;
+      align-self: flex-end;
+    }
+
+    .bot-message {
+      background-color: #f1f3f5;
+      align-self: flex-start;
+    }
+
+    #input-area {
+      display: flex;
+      padding: 12px;
+      background: #fafafa;
+      border-top: 1px solid #ddd;
+    }
+
+    #user-input {
+      flex: 1;
+      padding: 10px 14px;
+      font-size: 16px;
+      border: 1px solid #007bff;
+      border-radius: 6px;
+      outline: none;
+    }
+
+    #send-button {
+      margin-left: 10px;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      padding: 10px 18px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #send-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
 
 <div id="chat-container">
-    <div id="chatbox"></div>
-    <div id="input-area">
-        <input type="text" id="user-input" placeholder="Nhập tin nhắn..." />
-        <button id="send-button">Gửi</button>
-    </div>
+  <div id="chatbox"></div>
+  <div id="input-area">
+    <input type="text" id="user-input" placeholder="Nhấn Enter để gửi tin..." autocomplete="off" />
+    <button id="send-button">Gửi</button>
+  </div>
 </div>
 
 <script>
-    document.getElementById('send-button').onclick = function() {
-        var userInput = document.getElementById('user-input').value;
-        if (userInput) {
-            addMessage(userInput, 'user');
-            document.getElementById('user-input').value = '';
+  const inputField = document.getElementById('user-input');
+  const sendButton = document.getElementById('send-button');
 
-            fetch('/chatbot', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ message: userInput })
-            })
-            .then(response => response.json())
-            .then(data => {
-                addMessage(data.response, 'bot');
-            });
-        }
-    };
+  function addMessage(text, sender) {
+    const chatbox = document.getElementById('chatbox');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message ' + (sender === 'user' ? 'user-message' : 'bot-message');
+    messageDiv.textContent = text;
+    chatbox.appendChild(messageDiv);
+    chatbox.scrollTop = chatbox.scrollHeight;
+  }
 
-    function addMessage(text, sender) {
-        var chatbox = document.getElementById('chatbox');
-        var messageDiv = document.createElement('div');
-        messageDiv.className = 'message ' + (sender === 'user' ? 'user-message' : 'bot-message');
-        messageDiv.textContent = text;
-        chatbox.appendChild(messageDiv);
-        chatbox.scrollTop = chatbox.scrollHeight; // Cuộn xuống cuối
+  function sendMessage() {
+    const userInput = inputField.value.trim();
+    if (!userInput) return;
+
+    addMessage(userInput, 'user');
+    inputField.value = '';
+
+    fetch('/chatbot', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: userInput })
+    })
+    .then(response => response.json())
+    .then(data => {
+      addMessage(data.response, 'bot');
+    })
+    .catch(error => {
+      addMessage("Đã có lỗi xảy ra. Vui lòng thử lại sau.", 'bot');
+    });
+  }
+
+  // Gửi khi nhấn Enter
+  inputField.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      sendMessage();
     }
+  });
+
+  // Gửi khi bấm nút
+  sendButton.addEventListener('click', sendMessage);
 </script>
 
 </body>
