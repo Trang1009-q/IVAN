@@ -1,9 +1,7 @@
-import pyttsx3
-from flask import Flask, request, jsonify, render_template  # Thêm render_template vào import
+from flask import Flask, request, jsonify, render_template
 from datetime import date, datetime
 
 app = Flask(__name__)
-robot_mouth = pyttsx3.init()
 
 def chatbot_response(user_input):
     robot_brain = ""
@@ -16,10 +14,7 @@ def chatbot_response(user_input):
         robot_brain = datetime.now().strftime("%H giờ %M phút %S giây")
     elif "tạm biệt" in user_input:
         robot_brain = "Tạm biệt Trang"
-        robot_mouth.say(robot_brain)
-        robot_mouth.runAndWait()
-        return robot_brain
-
+    
     # Các vấn đề liên quan đến tài khoản
     elif "quên mật khẩu" in user_input:
         robot_brain = "Bạn có thể sử dụng chức năng 'Quên mật khẩu' trên trang đăng nhập."
@@ -73,7 +68,7 @@ def chatbot_response(user_input):
 
 @app.route("/")
 def home():
-    return render_template("index.html")  # Đảm bảo rằng tệp index.html tồn tại trong thư mục templates
+    return render_template("index.html")
 
 @app.route("/chatbot", methods=["POST"])
 def chat():
