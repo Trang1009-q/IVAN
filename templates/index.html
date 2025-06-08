@@ -50,6 +50,8 @@
             max-width: 80%;
             position: relative;
             word-wrap: break-word;
+            display: flex;
+            flex-direction: column; /* Để căn chỉnh thời gian bên dưới */
         }
         .user-message {
             background-color: #c9dbe6; /* Màu khung chat người dùng */
@@ -90,9 +92,8 @@
         .timestamp {
             font-size: 12px;
             color: #888;
-            position: absolute;
-            bottom: -18px;
-            right: 10px;
+            align-self: flex-end; /* Căn chỉnh thời gian ở bên phải */
+            margin-top: 5px; /* Khoảng cách giữa tin nhắn và thời gian */
         }
     </style>
 </head>
